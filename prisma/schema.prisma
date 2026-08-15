@@ -50,6 +50,7 @@ model User {
   name          String         @db.VarChar(100)
   email         String         @unique @db.VarChar(150)
   password_hash String         @db.Text
+  verification_code String?
   is_verified   Boolean        @default(false)
   role          Role           @default(user)
   created_at    DateTime       @default(now())

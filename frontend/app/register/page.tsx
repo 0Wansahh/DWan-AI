@@ -23,30 +23,40 @@ export default function Register() {
     setLoading(true);
     setError("");
 
-    try {
+        try {
+      // Mengirim data ke API menggunakan proxy Next.js
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
       });
 
-      const data = await response.json();
+      // Ambil teks respon dulu untuk antisipasi jika server error bukan JSON
+      const textResponse = await response.text();
+      let data;
+      try {
+        data = JSON.parse(textResponse);
+      } catch (e) {
+        throw new Error("Respon server tidak valid: " + textResponse);
+      }
 
       if (!response.ok) {
         throw new Error(data.error || "Gagal melakukan registrasi");
       }
 
-      // Jika sukses
+          // Jika sukses
       setSuccess(true);
       setTimeout(() => {
-        router.push("/login"); // Otomatis pindah ke halaman login setelah 2 detik
-      }, 2000);
+      router.push("/verify?email=" + encodeURIComponent(email)); 
+    }, 2000);
+
 
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
+
   };
 
   return (
