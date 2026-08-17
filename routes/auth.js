@@ -84,14 +84,6 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email atau password salah!' });
     }
 
-    // (Opsional) Cek apakah akun sudah diverifikasi
-    // Jika ingin mewajibkan verifikasi sebelum login, aktifkan blok if di bawah ini:
-    /*
-    if (!user.is_verified) {
-      return res.status(403).json({ error: 'Akun belum diverifikasi. Cek email untuk kode OTP.' });
-    }
-    */
-
     // Buat JWT Token
     const token = jwt.sign(
       { userId: user.id, email: user.email },
@@ -115,7 +107,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-    // 3. ROUTE VERIFIKASI OTP
+// 3. ROUTE VERIFIKASI OTP
 router.post('/verify', async (req, res) => {
   try {
     const { email, code } = req.body;
@@ -141,7 +133,7 @@ router.post('/verify', async (req, res) => {
       where: { email },
       data: { 
         is_verified: true, 
-        verification_code: null // Kosongkan kode agar tidak bisa dipakai lagi
+        verification_code: null 
       },
     });
 
